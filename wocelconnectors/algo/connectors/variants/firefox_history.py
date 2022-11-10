@@ -36,6 +36,7 @@ def apply(parameters: Optional[Dict[Any, str]] = None) -> pd.DataFrame:
 
     history_db_path = exec_utils.get_param_value(Parameters.HISTORY_DB_PATH, parameters, "C:\\Users\\" + os.getenv(
         'USERNAME') + "\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles")
+    print(history_db_path)
 
     if os.path.isdir(history_db_path):
         profiles = [(os.path.join(history_db_path, x, "places.sqlite"), x) for x in os.listdir(history_db_path)]

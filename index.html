@@ -89,8 +89,10 @@ Select the target process:
 	function insertParameters(url) {
 		let selectedProcess = document.getElementById("targetProcessSelection").value;
 		if (selectedProcess == "firefox_history") {
+			url.searchParams.append("history_db_path", document.getElementById("firefoxHistoryPath").value);
 		}
 		else if (selectedProcess == "chrome_history") {
+			url.searchParams.append("history_db_path", document.getElementById("chromeHistoryPath").value);
 		}
 		else if (selectedProcess == "github_repo") {
 			url.searchParams.append("owner", document.getElementById("githubOwner").value);
