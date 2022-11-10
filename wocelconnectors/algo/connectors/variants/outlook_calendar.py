@@ -5,6 +5,7 @@ from wocelconnectors.algo.connectors.util import mail as mail_utils
 import pandas as pd
 from datetime import datetime
 import pkgutil
+import traceback
 
 
 class Parameters(Enum):
@@ -67,6 +68,7 @@ def apply(parameters: Optional[Dict[str, Any]] = None) -> pd.DataFrame:
                 {"case:concept:name": conversation_id, "case:subject": subject, "time:timestamp": end_timestamp,
                  "concept:name": "Meeting Completed"})
         except:
+            traceback.print_exc()
             pass
         if progress is not None:
             progress.update()

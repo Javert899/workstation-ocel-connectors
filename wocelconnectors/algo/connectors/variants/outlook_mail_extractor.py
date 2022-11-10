@@ -4,6 +4,7 @@ import pandas as pd
 from datetime import datetime
 from typing import List, Any
 import pkgutil
+import traceback
 
 
 correspondence = {
@@ -58,6 +59,7 @@ def get_events(box, prefix, progress) -> List[Dict[str, Any]]:
                 events.append({"case:concept:name": conversationid, "concept:name": cla, "time:timestamp": timestamp,
                                "org:resource": sender, "recipients": recipients, "topic": conversationtopic, "subject": subject})
         except:
+            traceback.print_exc()
             pass
         if progress is not None:
             progress.update()

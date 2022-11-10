@@ -3,6 +3,7 @@ import win32com.client
 import pandas as pd
 from datetime import datetime
 import pkgutil
+import traceback
 
 
 def apply(parameters: Optional[Dict[str, Any]] = None) -> pd.DataFrame:
