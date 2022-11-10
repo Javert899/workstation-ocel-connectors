@@ -70,6 +70,15 @@ def extractOcel():
     return resp
 
 
+@app.route("/index.html")
+def index():
+    response = make_response(render_template('index.html'))
+    return response
+
+@app.route("/")
+def welcome():
+    return redirect(url_for('index'))
+
 def main():
     app.run(host='0.0.0.0', threaded=False)
 

@@ -110,7 +110,8 @@ Select the target process:
 	}
 	
 	function extractCsv() {
-		var url = new URL("http://localhost:5000/extractCsv");
+		let baseUrl = location.protocol + '//' + location.host + "/extractCsv";
+		var url = new URL(baseUrl);
 		url.searchParams.append("variant", document.getElementById("targetProcessSelection").value);
 		insertParameters(url);
 		
@@ -118,7 +119,8 @@ Select the target process:
 	}
 	
 	function extractOcel() {
-		var url = new URL("http://localhost:5000/extractOcel");
+		let baseUrl = location.protocol + '//' + location.host + "/extractOcel";
+		var url = new URL(baseUrl);
 		url.searchParams.append("variant", document.getElementById("targetProcessSelection").value);
 		insertParameters(url);
 		
