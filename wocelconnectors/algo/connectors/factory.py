@@ -8,7 +8,7 @@ def apply(variant, parameters0=None):
     parameters = {}
 
     for param in parameters0:
-        if parameters0[param] is not None and parameters0[param] != " ":
+        if parameters0[param] is not None and parameters0[param] != "" and parameters0[param] != " ":
             parameters[param] = parameters0[param]
 
     if variant == "chrome_history":

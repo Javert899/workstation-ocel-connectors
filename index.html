@@ -1,0 +1,127 @@
+<html>
+<head>
+<script type="text/javascript" src="static/jquery-3.6.1.min.js"></script>
+</head>
+<body>
+<img src="static/pads_rwth.png">
+<h2>Local Workstation Traditional/OCEL Event Log Extraction</h2>
+<p>Here, you could select a target system, insert the required parameters and allow for the extraction of an event log.</p>
+<p>
+Select the target process:
+<select id="targetProcessSelection" name="targetProcessSelection" onchange="javascript:changedTargetProcessSelection()">
+<option value="firefox_history">Firefox navigation history (Firefox should be closed)</option>
+<option value="chrome_history">Chrome navigation history (Chrome should be closed)</option>
+<option value="github_repo">Issues of a Github repository</option>
+<option value="outlook_calendar">History of Outlook Calendar</option>
+<option value="outlook_mail_extractor">History of Outlook Mails</option>
+<option value="windows_events">Windows Events Registry</option>
+</select>
+<div id="firefoxHistoryParameters" style="display: ">
+<h3>Parameters for: Firefox navigation history (Firefox should be closed)</h3>
+<p>(empty is default) Path to the SQLite database(s): <input id="firefoxHistoryPath" name="firefoxHistoryPath" type="text"></input></p>
+</div>
+<div id="chromeHistoryParameters" style="display: none">
+<h3>Parameters for: Chrome navigation history (Chrome should be closed)</h3>
+<p>(empty is default) Path to the SQLite database(s): <input id="chromeHistoryPath" name="chromeHistoryPath" type="text"></input></p>
+</div>
+<div id="githubIssuesParameters" style="display: none">
+<h3>Parameters for: Issues of a Github repository</h3>
+<table>
+<tr><td>Owner:</td><td><input id="githubOwner" name="githubOwner" type="text" value="pm4js"></input></td></tr>
+<tr><td>Repository:</td><td><input id="githubRepo" name="githubRepo" type="text" value="pm4js-core"></input></td></tr>
+<tr><td>(empty is default) Auth Token:</td><td><input id="githubAuthToken" name="githubAuthToken" type="text"></input></td></tr>
+</table>
+</div>
+<div id="outlookCalendarParameters" style="display: none">
+<h3>Parameters for: History of Outlook Calendar</h3>
+<table>
+<tr><td>(empty is default) Calendar Email Address:</td><td><input id="outlookCalendarEmail" name="outlookCalendarEmail" type="text"></input></td></tr>
+<tr><td>Calendar Folder ID:</td><td><input id="outlookFolderID" name="outlookFolderID" type="number" value="9"></input></td></tr>
+</table>
+</div>
+<div id="outlookMailExtractorParameters" style="display: none">
+<h3>Parameters for: History of Outlook Mails</h3>
+<p>No parameters exist for this extractor.</p>
+</div>
+<div id="windowsEventsParameters" style="display: none">
+<h3>Parameters for: Windows Events Registry</h3>
+<p>No parameters exist for this extractor.</p>
+</div>
+</p>
+<p>
+<button onclick="javascript: extractCsv()">Extract Traditional Log (CSV)</button>
+&nbsp;&nbsp;
+<button onclick="javascript: extractOcel()">Extract OCEL</button>
+</p>
+<script type="text/javascript">
+	function hideAllParameters() {
+		document.getElementById("firefoxHistoryParameters").style.display = "none";
+		document.getElementById("chromeHistoryParameters").style.display = "none";
+		document.getElementById("githubIssuesParameters").style.display = "none";
+		document.getElementById("outlookCalendarParameters").style.display = "none";
+		document.getElementById("outlookMailExtractorParameters").style.display = "none";
+		document.getElementById("windowsEventsParameters").style.display = "none";
+	}
+	
+	function changedTargetProcessSelection() {
+		let selectedProcess = document.getElementById("targetProcessSelection").value;
+		hideAllParameters();
+		if (selectedProcess == "firefox_history") {
+			document.getElementById("firefoxHistoryParameters").style.display = "";
+		}
+		else if (selectedProcess == "chrome_history") {
+			document.getElementById("chromeHistoryParameters").style.display = "";
+		}
+		else if (selectedProcess == "github_repo") {
+			document.getElementById("githubIssuesParameters").style.display = "";
+		}
+		else if (selectedProcess == "outlook_calendar") {
+			document.getElementById("outlookCalendarParameters").style.display = "";
+		}
+		else if (selectedProcess == "outlook_mail_extractor") {
+			document.getElementById("outlookMailExtractorParameters").style.display = "";
+		}
+		else if (selectedProcess == "windows_events") {
+			document.getElementById("windowsEventsParameters").style.display = "";
+		}
+	}
+	
+	function insertParameters(url) {
+		let selectedProcess = document.getElementById("targetProcessSelection").value;
+		if (selectedProcess == "firefox_history") {
+		}
+		else if (selectedProcess == "chrome_history") {
+		}
+		else if (selectedProcess == "github_repo") {
+			url.searchParams.append("owner", document.getElementById("githubOwner").value);
+			url.searchParams.append("repository", document.getElementById("githubRepo").value);
+			url.searchParams.append("auth_token", document.getElementById("githubAuthToken").value);
+		}
+		else if (selectedProcess == "outlook_calendar") {
+			url.searchParams.append("email_user", document.getElementById("outlookCalendarEmail").value);
+			url.searchParams.append("calendar_id", document.getElementById("outlookFolderID").value);
+		}
+		else if (selectedProcess == "outlook_mail_extractor") {
+		}
+		else if (selectedProcess == "windows_events") {
+		}
+	}
+	
+	function extractCsv() {
+		var url = new URL("http://localhost:5000/extractCsv");
+		url.searchParams.append("variant", document.getElementById("targetProcessSelection").value);
+		insertParameters(url);
+		
+		window.open(url,'_blank');
+	}
+	
+	function extractOcel() {
+		var url = new URL("http://localhost:5000/extractOcel");
+		url.searchParams.append("variant", document.getElementById("targetProcessSelection").value);
+		insertParameters(url);
+		
+		window.open(url,'_blank');
+	}
+</script>
+</body>
+</html>
