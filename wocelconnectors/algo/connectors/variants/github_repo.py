@@ -5,6 +5,7 @@ from dateutil.parser import parse
 from typing import Optional, Dict, Any
 from enum import Enum
 from pm4py.util import exec_utils
+import pkgutil
 
 
 class Parameters(Enum):
@@ -49,6 +50,8 @@ def apply(parameters: Optional[Dict[Any, str]] = None) -> pd.DataFrame:
     page = 0
     events = []
 
+    progress = None
+
     while continuee:
         page += 1
         try:
@@ -56,6 +59,13 @@ def apply(parameters: Optional[Dict[Any, str]] = None) -> pd.DataFrame:
             issues = r.json()
             if not issues:
                 continuee = False
+                break
+
+            if pkgutil.find_loader("tqdm"):
+                from tqdm.auto import tqdm
+                progress = tqdm(total=len(issues),
+                                desc="extracting issues of page " + str(page) + ", progress :: ")
+
             for i in issues:
                 if continuee:
                     if "timeline_url" in i:
@@ -73,10 +83,18 @@ def apply(parameters: Optional[Dict[Any, str]] = None) -> pd.DataFrame:
                                 if "pull_request" in i:
                                     eve["case:pull_request"] = i["pull_request"]["url"]
                                 events.append(eve)
+                        if progress is not None:
+                            progress.update()
+            if progress is not None:
+                progress.close()
             time.sleep(1)
         except:
+            continuee = False
             traceback.print_exc()
+            if progress is not None:
+                progress.close()
             break
+
     dataframe = pd.DataFrame(events)
     if len(dataframe) > 0:
         dataframe["@@index"] = dataframe.index

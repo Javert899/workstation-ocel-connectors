@@ -22,6 +22,7 @@ def connect(email_user: Optional[str], mailbox_id: int):
         Mailbox object
     """
     outlook = win32com.client.Dispatch('Outlook.Application').GetNamespace('MAPI')
+    mailbox_id = int(mailbox_id)
 
     if email_user is not None:
         recipient = outlook.CreateRecipient(email_user)

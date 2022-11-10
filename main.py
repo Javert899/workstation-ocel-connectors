@@ -57,6 +57,8 @@ def extractOcel():
 
     temp_file = tempfile.NamedTemporaryFile(suffix=".jsonocel")
     temp_file.close()
+
+    ocel.relations.drop_duplicates(subset=[ocel.event_id_column, ocel.object_id_column], inplace=True)
     pm4py.write_ocel(ocel, temp_file.name)
 
     resp = send_file(temp_file.name,
@@ -69,7 +71,7 @@ def extractOcel():
 
 
 def main():
-    app.run(host='0.0.0.0', threaded=True)
+    app.run(host='0.0.0.0', threaded=False)
 
 
 if __name__ == "__main__":
