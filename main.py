@@ -11,9 +11,14 @@ from contextlib import closing
 import requests
 import setuptools
 import win32com
+import os
 
 
-app = Flask(__name__)
+templatesDir = os.getcwd() + '/templates'
+staticDir = os.getcwd() + '/static'
+
+
+app = Flask(__name__, template_folder=templatesDir, static_folder=staticDir)
 CORS(app, expose_headers=["x-suggested-filename"])
 
 
