@@ -3,10 +3,20 @@ from flask_cors import CORS
 from wocelconnectors.algo.connectors import factory as connectors_factory
 import tempfile
 import pm4py
+import webbrowser
+from threading import Timer
+from random import randrange
+import socket
+from contextlib import closing
 
 
 app = Flask(__name__)
 CORS(app, expose_headers=["x-suggested-filename"])
+
+
+
+class Globals:
+    PORT = 5000
 
 
 @app.route("/extractCsv")
@@ -75,12 +85,32 @@ def index():
     response = make_response(render_template('index.html'))
     return response
 
+
 @app.route("/")
 def welcome():
     return redirect(url_for('index'))
 
+
+def open_browser():
+    webbrowser.open_new("http://127.0.0.1:"+str(Globals.PORT)+"/index.html")
+
+
+def check_socket(host, port):
+    with closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as sock:
+        if sock.connect_ex((host, port)) == 0:
+            return False
+        else:
+            return True
+
+
 def main():
-    app.run(host='0.0.0.0', threaded=False)
+    while True:
+        Globals.PORT = randrange(10000, 20000)
+        if check_socket("127.0.0.1", Globals.PORT):
+            break
+    Timer(1, open_browser).start()
+    #open_browser()
+    app.run(host='0.0.0.0', port=Globals.PORT, threaded=True)
 
 
 if __name__ == "__main__":

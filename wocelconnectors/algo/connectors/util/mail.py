@@ -1,4 +1,3 @@
-import win32com.client
 from typing import Optional
 
 
@@ -21,6 +20,8 @@ def connect(email_user: Optional[str], mailbox_id: int):
     mailbox_obj
         Mailbox object
     """
+    import win32com.client
+
     outlook = win32com.client.Dispatch('Outlook.Application').GetNamespace('MAPI')
     mailbox_id = int(mailbox_id)
 
