@@ -8,6 +8,9 @@ from threading import Timer
 from random import randrange
 import socket
 from contextlib import closing
+import requests
+import setuptools
+import win32com
 
 
 app = Flask(__name__)
